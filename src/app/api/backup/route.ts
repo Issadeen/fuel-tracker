@@ -24,8 +24,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid backup format' }, { status: 400 });
     }
     
-    restoreFromBackup(body, companyId ? parseInt(companyId) : undefined);
-    addAuditLog('RESTORE_BACKUP', 'system', null, `Restored ${body.trucks.length} trucks`, companyId ? parseInt(companyId) : undefined);
+    const cId = companyId ? parseInt(companyId) : 1;
+    restoreFromBackup(cId, body);
+    addAuditLog('RESTORE_BACKUP', 'system', null, `Restored ${body.trucks.length} trucks`, cId);
     
     return NextResponse.json({ success: true, trucksRestored: body.trucks.length });
   } catch (error) {
